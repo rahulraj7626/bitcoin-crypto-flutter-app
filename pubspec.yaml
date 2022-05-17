@@ -37,6 +37,7 @@ dependencies:
   syncfusion_flutter_charts: ^19.4.56
   candlesticks: ^2.1.0
   http: ^0.13.4
+  dartdoc: ^5.0.0
 
 dev_dependencies:
   flutter_test:

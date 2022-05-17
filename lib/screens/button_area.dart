@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:graph/common_widgets/button.dart';
 import 'package:graph/utils/color_constants.dart';
 
-Widget buttonWidgets(BuildContext context, width) {
+Widget buttonWidgets(BuildContext context, width, price) {
   return SizedBox(
       height: 95,
       width: width,
       child: Row(
         children: [
-          buttonw(CColors.red, "Buy", Icons.arrow_downward, "38,465.18"),
+          buttonw(CColors.red, "Buy", Icons.arrow_downward, price),
           const SizedBox(
             width: 6,
           ),
-          buttonw(CColors.green, "Sell", Icons.arrow_upward, "38,465.18")
+          buttonw(CColors.green, "Sell", Icons.arrow_upward, price)
         ],
       ));
 }

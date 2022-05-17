@@ -1,16 +1,27 @@
-import 'package:candlesticks/candlesticks.dart';
-import 'package:graph/model/list_model.dart';
+import 'package:flutter/material.dart';
+import 'package:graph/utils/api_constant.dart';
+import 'package:graph/utils/enumerator.dart';
 
-List<Candle> candleAdd(List<Result> resul) {
-  List<Candle> cand = [];
-  for (int i = 0; i < resul.length; i++) {
-    cand.add(Candle(
-        date: DateTime.fromMicrosecondsSinceEpoch(resul[i].resultT),
-        high: resul[i].h,
-        low: resul[i].l,
-        open: resul[i].o,
-        close: resul[i].c,
-        volume: resul[i].v));
+//Case funtion for specific currency
+String checkCoin(CoinType cType) {
+  switch (cType) {
+    case CoinType.bitCoin:
+      return ApiConstant.bitCoin;
+    case CoinType.etherium:
+      return ApiConstant.etherium;
+    case CoinType.tether:
+      return ApiConstant.tether;
+    case CoinType.bnb:
+      return ApiConstant.bnb;
   }
-  return cand;
 }
+
+//Icon list
+List<IconData> iconList = const [
+  Icons.currency_bitcoin,
+  Icons.currency_pound,
+  Icons.currency_lira_sharp,
+  Icons.currency_franc,
+];
+//Coin nameList
+List<String> iconName = const ["Bitcoin", "Ethereum", "TetherUS", "BNB"];

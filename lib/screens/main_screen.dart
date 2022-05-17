@@ -1,10 +1,10 @@
 import 'package:candlesticks/candlesticks.dart';
 import 'package:flutter/material.dart';
-import 'package:graph/model/list_model.dart';
 import 'package:graph/network_services/graph_service.dart';
 import 'package:graph/screens/appbarwidget.dart';
 import 'package:graph/screens/button_area.dart';
 import 'package:graph/utils/color_constants.dart';
+import 'package:graph/utils/enumerator.dart';
 import 'package:graph/utils/utils_funtions.dart';
 
 class MainScreen extends StatefulWidget {
@@ -17,25 +17,17 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   List<Candle> candles = [];
 
-  fetch(isBit) {
-    isBit == true
-        ? fetchBitcoin().then((value) {
-            setState(() {
-              candles = value;
-            });
-          })
-        : fetchCandles().then((value) {
-            setState(() {
-              List<Result> result = value.results;
-
-              candles = candleAdd(result);
-            });
-          });
+  fetch(CoinType ctype) {
+    fetchBitcoin(checkCoin(ctype)).then((value) {
+      setState(() {
+        candles = value;
+      });
+    });
   }
 
   @override
   void initState() {
-    fetch(true);
+    fetch(CoinType.bitCoin);
     super.initState();
   }
 
@@ -44,7 +36,8 @@ class _MainScreenState extends State<MainScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: appbarWidget(),
+      appBar:
+          appbarWidget(candles.isNotEmpty ? candles[0].close.toString() : ""),
       body: SafeArea(
         child: SizedBox(
           height: height,
@@ -59,7 +52,8 @@ class _MainScreenState extends State<MainScreen> {
                   candles: candles,
                 ),
               ),
-              buttonWidgets(context, height)
+              buttonWidgets(context, height,
+                  candles.isNotEmpty ? candles[0].close.toString() : "")
             ],
           ),
         ),
@@ -71,14 +65,31 @@ class _MainScreenState extends State<MainScreen> {
     return SizedBox(
       height: 90,
       child: ListView.builder(
-          itemCount: 2,
+          itemCount: 4,
           physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () {
                 setState(() {
-                  index == 0 ? fetch(true) : fetch(false);
+                  switch (index) {
+                    case 0:
+                      fetch(CoinType.bitCoin);
+
+                      break;
+                    case 1:
+                      fetch(CoinType.etherium);
+
+                      break;
+                    case 2:
+                      fetch(CoinType.tether);
+
+                      break;
+                    case 3:
+                      fetch(CoinType.bnb);
+
+                      break;
+                  }
                 });
               },
               child: Container(
@@ -91,15 +102,13 @@ class _MainScreenState extends State<MainScreen> {
                         backgroundColor: CColors.lightBlack,
                         radius: 30,
                         child: Icon(
-                          index == 0
-                              ? Icons.currency_bitcoin
-                              : Icons.currency_pound,
+                          iconList[index],
                           size: 33,
                           color: Colors.white,
                         ),
                       ),
                       Text(
-                        index == 0 ? "Bitcoin" : "Crypto",
+                        iconName[index],
                         style: const TextStyle(fontWeight: FontWeight.w600),
                       )
                     ]),
